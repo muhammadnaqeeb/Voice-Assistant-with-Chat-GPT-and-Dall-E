@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:voice_assistant/color_pallete.dart';
+import 'package:voice_assistant/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,11 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Container(),
+      debugShowCheckedModeBanner: false,
+      title: 'Voice Assistant',
+      theme: ThemeData.light(useMaterial3: true).copyWith(
+          scaffoldBackgroundColor: Pallete.whiteColor,
+          appBarTheme: const AppBarTheme(backgroundColor: Pallete.whiteColor)),
+      home: HomePage(),
     );
   }
 }
