@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:voice_assistant/color_pallete.dart';
@@ -18,11 +19,19 @@ class _HomePageState extends State<HomePage> {
   final speechToText = SpeechToText();
   // this lastWords will contains words which user saids.
   String lastWords = "";
+  final flutterTts = FlutterTts();
   final OpenAIService openAIService = OpenAIService();
   @override
   void initState() {
     super.initState();
     initSpeechToText();
+    initTextToSpeech();
+  }
+
+  Future<void> initTextToSpeech() async {
+    // for ios
+    await flutterTts.setSharedInstance(true);
+    setState(() {});
   }
 
   Future<void> initSpeechToText() async {
@@ -50,10 +59,15 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> systemSpeak(String content) async {
+    await flutterTts.speak(content);
+  }
+
   @override
   void dispose() {
     super.dispose();
     speechToText.stop();
+    flutterTts.stop(); //
   }
 
   @override
@@ -140,8 +154,9 @@ class _HomePageState extends State<HomePage> {
             await startListening();
           } else if (speechToText.isListening) {
             final speech = await openAIService.isArtPromptAPI(lastWords);
-            print('------------------');
-            print(speech);
+            //print('------------------');
+            //print(speech);
+            await systemSpeak(speech);
             await stopListening();
           } else {
             initSpeechToText();
