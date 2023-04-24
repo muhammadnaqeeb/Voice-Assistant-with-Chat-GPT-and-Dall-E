@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:voice_assistant/secrets.dart';
 
 class OpenAIService {
+  final List<Map<String, String>> masseges = [];
   // this function tell us whether it is chatGPTAPI or dallEAPI request
   Future<String> isArtPromptAPI(String prompt) async {
     try {
@@ -52,7 +53,39 @@ class OpenAIService {
   }
 
   Future<String> chatGPTAPI(String prompt) async {
-    return "CHATGPT";
+    masseges.add({
+      'role': 'user',
+      'content': prompt,
+    });
+    try {
+      final res = await http.post(
+        Uri.parse("https://api.openai.com/v1/chat/completions"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $openAIAPIKEY3"
+        },
+        body: jsonEncode({
+          "model": "gpt-3.5-turbo",
+          "messages": masseges,
+        }),
+      );
+
+      //print(res.body);
+      if (res.statusCode == 200) {
+        String content =
+            jsonDecode(res.body)['choices'][0]['message']['content'];
+        content = content.trim();
+
+        masseges.add({
+          'role': 'assistant',
+          'content': content,
+        });
+        return content;
+      }
+      return "An internal error occur";
+    } catch (e) {
+      return e.toString();
+    }
   }
 
   Future<String> dallEAPI(String prompt) async {
