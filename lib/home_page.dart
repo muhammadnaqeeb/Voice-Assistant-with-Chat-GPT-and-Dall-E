@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -76,96 +74,98 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Voice Assistant"),
-        leading: const Icon(Icons.chat_bubble_outline_outlined),
+        title: const Text("Voice Chatbot"),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 26),
+          child: Image.asset("assets/images/chatgpt.png"),
+        ),
         centerTitle: false,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Center(
-              child: Image(
-                image: AssetImage("assets/images/chatgpt_icon.png"),
-                width: 110,
-                height: 110,
-              ),
-            ),
-            if (generatedContent != null)
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                margin: const EdgeInsets.symmetric(horizontal: 40)
-                    .copyWith(top: 30),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Pallete.blackColor),
-                  borderRadius:
-                      BorderRadius.circular(20).copyWith(topLeft: Radius.zero),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          child: Column(
+            children: [
+              const Text(
+                "Budddy Voice Chatbot",
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.w300,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Text(
-                    generatedContent!,
-                    style: TextStyle(
-                      color: Pallete.mainFontColor,
-                      fontSize: generatedContent == null ? 20 : 16,
+              ),
+              const Text(
+                "Get your work done in seconds - with chatbot! powered by AI",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              if (generatedContent != null)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  margin: const EdgeInsets.only(top: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(15)
+                        .copyWith(topLeft: Radius.zero),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      generatedContent!,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: generatedContent == null ? 20 : 16,
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-            if (generatedImageUrl != null)
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(generatedImageUrl!)),
-              ),
-            Visibility(
-              visible: generatedContent == null && generatedImageUrl == null,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.all(10),
-                margin: const EdgeInsets.only(top: 10, left: 22),
-                child: const Text(
-                  "Here are some features",
-                  style: TextStyle(
-                    color: Pallete.mainFontColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+              if (generatedImageUrl != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(generatedImageUrl!)),
                 ),
-              ),
-            ),
-            // --- Features List
-            Visibility(
-              visible: generatedContent == null && generatedImageUrl == null,
-              child: Column(
-                children: const [
-                  FeatureBox(
-                    color: Pallete.firstSuggestionBoxColor,
-                    headerText: "ChatGPT",
-                    descriptionText:
-                        "A smarter way to stay organized and informed with ChatGPT",
-                  ),
-                  FeatureBox(
-                    color: Pallete.secondSuggestionBoxColor,
-                    headerText: "Dall-E",
-                    descriptionText:
-                        "A smarter way to stay organized and informed with ChatGPT",
-                  ),
-                  FeatureBox(
-                    color: Pallete.firstSuggestionBoxColor,
-                    headerText: "Smart Voice Assistant",
-                    descriptionText:
-                        "A smarter way to stay organized and informed with ChatGPT",
-                  ),
-                ],
-              ),
-            )
-          ],
+              // --- Features List
+              Visibility(
+                visible: generatedContent == null && generatedImageUrl == null,
+                child: Column(
+                  children: const [
+                    FeatureBox(
+                      headerText: "Voice Assistant",
+                      descriptionText:
+                          "Program that understand voice and completes tasks",
+                    ),
+                    FeatureBox(
+                      headerText: "ChatGPT",
+                      descriptionText:
+                          "ChatGPT is a model which can answer questions and help you with tasks",
+                    ),
+                    FeatureBox(
+                      headerText: "Dall-E",
+                      descriptionText:
+                          "DALL-E is an AI system that can produce realistic images from text prompts.",
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(0),
+                bottomRight: Radius.circular(20),
+                bottomLeft: Radius.circular(20),
+                topRight: Radius.circular(20))),
         backgroundColor: Pallete.firstSuggestionBoxColor,
         onPressed: () async {
           if (await speechToText.hasPermission && speechToText.isNotListening) {
@@ -188,7 +188,7 @@ class _HomePageState extends State<HomePage> {
             initSpeechToText();
           }
         },
-        child: const Icon(Icons.mic),
+        child: Icon(speechToText.isListening ? Icons.stop : Icons.mic),
       ),
     );
   }
