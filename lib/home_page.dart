@@ -76,14 +76,14 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("Voice Chatbot"),
         leading: Padding(
-          padding: const EdgeInsets.only(left: 26),
+          padding: const EdgeInsets.only(left: 22),
           child: Image.asset("assets/images/chatgpt.png"),
         ),
         centerTitle: false,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
               const Text(
